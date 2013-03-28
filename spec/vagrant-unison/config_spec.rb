@@ -1,6 +1,6 @@
-require "vagrant-sync/config"
+require "vagrant-unison/config"
 
-describe VagrantPlugins::Sync::Config do
+describe VagrantPlugins::Unison::Config do
   let(:instance) { described_class.new }
 
   describe "defaults" do

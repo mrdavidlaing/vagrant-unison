@@ -2,7 +2,7 @@ require "log4r"
 require "vagrant"
 
 module VagrantPlugins
-  module Sync
+  module Unison
     class Command < Vagrant.plugin("2", :command)
       def execute
 
@@ -17,13 +17,13 @@ module VagrantPlugins
           # avoid creating an additional directory with rsync
           hostpath = "#{hostpath}/" if hostpath !~ /\/$/
 
-          @env.ui.info "Syncing {host}::#{hostpath} --> {guest VM}::#{guestpath}"
+          @env.ui.info "Unisoning {host}::#{hostpath} --> {guest VM}::#{guestpath}"
 
           # Create the guest path
           #machine.communicate.sudo("mkdir -p '#{guestpath}'")
           #machine.communicate.sudo("chown #{ssh_info[:username]} '#{guestpath}'")
 
-          # Sync over to the guest path using the SSH info
+          # Unison over to the guest path using the SSH info
           command = [
             "unison", "-batch",
             "-ignore='Name {git*,.vagrant/,*.DS_Store}'",

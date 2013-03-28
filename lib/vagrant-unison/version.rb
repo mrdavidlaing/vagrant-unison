@@ -1,5 +1,5 @@
 module VagrantPlugins
-  module Sync
+  module Unison
     VERSION = "0.0.1.dev"
   end
 end

@@ -1,5 +1,5 @@
 en:
-  vagrant_rsync:
+  vagrant_unison:
     
     config:
       host_folder_required: |-

@@ -1,7 +1,7 @@
 require "vagrant"
 
 module VagrantPlugins
-  module Sync
+  module Unison
     class Config < Vagrant.plugin("2", :config)
       # The access key ID for accessing AWS.
       #
@@ -45,7 +45,7 @@ module VagrantPlugins
         errors << I18n.t("vagrant_sync.config.host_folder_required") if @host_folder.nil?
         errors << I18n.t("vagrant_sync.config.guest_folder_required") if @guest_folder.nil?
 
-        { "Sync" => errors }
+        { "Unison" => errors }
       end
     end
   end

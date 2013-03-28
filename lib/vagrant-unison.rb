@@ -1,10 +1,10 @@
 require "pathname"
 
-require "vagrant-sync/plugin"
-require "vagrant-sync/errors"
+require "vagrant-unison/plugin"
+require "vagrant-unison/errors"
 
 module VagrantPlugins
-  module Sync
+  module Unison
     # This returns the path to the source of this plugin.
     #
     # @return [Pathname]

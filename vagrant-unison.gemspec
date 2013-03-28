@@ -1,15 +1,15 @@
 $:.unshift File.expand_path("../lib", __FILE__)
-require "vagrant-sync/version"
+require "vagrant-unison/version"
 
 Gem::Specification.new do |s|
-  s.name          = "vagrant-sync"
-  s.version       = VagrantPlugins::Sync::VERSION
+  s.name          = "vagrant-unison"
+  s.version       = VagrantPlugins::Unison::VERSION
   s.platform      = Gem::Platform::RUBY
   s.authors       = "David Laing"
   s.email         = "david@davidlaing.com"
-  s.homepage      = "http://github.com/mrdavidlaing/vagrant-sync"
-  s.summary       = "Vagrant 1.1 plugin to sync local files to VM via SSH"
-  s.description   = "Vagrant 1.1 plugin to sync local files to VM via SSH"
+  s.homepage      = "http://github.com/mrdavidlaing/vagrant-unison"
+  s.summary       = "Vagrant 1.1 plugin to sync local files to VM over SSH"
+  s.description   = "Vagrant 1.1 plugin to sync local files to VM over SSH using Unison"
 
   s.required_rubygems_version = ">= 1.3.6"
 
