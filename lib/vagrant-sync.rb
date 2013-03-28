@@ -1,13 +1,10 @@
 require "pathname"
 
 require "vagrant-sync/plugin"
+require "vagrant-sync/errors"
 
 module VagrantPlugins
   module Sync
-    lib_path = Pathname.new(File.expand_path("../vagrant-sync", __FILE__))
-    autoload :Action, lib_path.join("action")
-    autoload :Errors, lib_path.join("errors")
-
     # This returns the path to the source of this plugin.
     #
     # @return [Pathname]

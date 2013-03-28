@@ -19,7 +19,7 @@ module VagrantPlugins
       to your Vagrant VM (local or on AWS). 
       DESC
 
-      config(:aws, :provider) do
+      config "sync" do
         require_relative "config"
         Config
       end

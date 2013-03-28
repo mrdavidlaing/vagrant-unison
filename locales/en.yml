@@ -2,16 +2,18 @@ en:
   vagrant_rsync:
     
     config:
-      local_folder_required: |-
-      Local folder is required
-    remote_folder_required: |-
-      Remote folder is required
+      host_folder_required: |-
+        Host folder is required
+      guest_folder_required: |-
+        Guest folder is required
 
     errors:
       unison_error: |-
-        There was an error when attemping to rsync a share folder.
+        There was an error when attemping to sync folders using unison.
         Please inspect the error message below for more info.
 
         Host path: %{hostpath}
         Guest path: %{guestpath}
         Error: %{stderr}
+        Full command causing error: 
+        %{command}
