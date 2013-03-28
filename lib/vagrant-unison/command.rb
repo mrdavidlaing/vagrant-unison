@@ -27,7 +27,7 @@ module VagrantPlugins
           command = [
             "unison", "-batch",
             "-ignore='Name {git*,.vagrant/,*.DS_Store}'",
-            "-sshargs=\"-p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'\"",
+            "-sshargs \"-p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i #{ssh_info[:private_key_path]}\"",
             hostpath,
             "ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
            ]
