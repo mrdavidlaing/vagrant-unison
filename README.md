@@ -24,10 +24,9 @@ $ vagrant plugin install vagrant-unison
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
 
-  config.vm.provider :sync do |sync|
-     sync.local_folder = "src/"  #relative to the folder your Vagrantfile is in
-     sync.remote_folder = "src/" #relative to the vagrant home folder -> /home/vagrant
-  end
+  config.sync.host_folder = "src/"  #relative to the folder your Vagrantfile is in
+  config.sync.guest_folder = "src/" #relative to the vagrant home folder -> /home/vagrant
+
 end
 ```
 1. Start up your starting your vagrant box as normal (eg: `vagrant up`)
