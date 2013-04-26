@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "listen", "~> 0.7.3"
   s.add_runtime_dependency "rb-fsevent", "~> 0.9"
+  s.add_runtime_dependency "net-scp", "~> 1.1.0"  
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec-core", "~> 2.12.2"

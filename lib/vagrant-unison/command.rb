@@ -1,6 +1,8 @@
 require "log4r"
 require "vagrant"
 require 'listen'
+require 'net/ssh'
+require 'net/scp'
 
 module VagrantPlugins
   module Unison
@@ -10,18 +12,42 @@ module VagrantPlugins
         
         with_target_vms do |machine|
           hostpath, guestpath = init_paths machine
+          
+          ssh_info = machine.ssh_info
+          
+          # Create the guest path
+          machine.communicate.sudo("mkdir -p '#{guestpath}'")
+          machine.communicate.sudo("chown #{ssh_info[:username]} '#{guestpath}'")
 
-          trigger_unison_sync machine
+          #copy up everything at the beginning
+          Net::SCP.start(ssh_info[:host], ssh_info[:username], 
+                        { :port => ssh_info[:port], 
+                          :keys => [ ssh_info[:private_key_path],
+                          :paranoid => false ] }) do |scp|
+            scp.upload! hostpath, guestpath, :recursive => true 
+          end
 
           @env.ui.info "Watching #{hostpath} for changes..."
 
           Listen.to(hostpath) do |modified, added, removed|
-            @env.ui.info "Detected modifications to #{modified.inspect}" unless modified.empty?
-            @env.ui.info "Detected new files #{added.inspect}" unless added.empty?
-            @env.ui.info "Detected deleted files #{removed.inspect}" unless removed.empty?
-            
-            trigger_unison_sync machine
+            Net::SCP.start(ssh_info[:host], ssh_info[:username], 
+                        { :port => ssh_info[:port], 
+                          :keys => [ ssh_info[:private_key_path],
+                          :paranoid => false ] }) do |scp|
+              (modified_list << added_list).flatten.each do |file|
+                remote_file = file.gsub(hostpath, guestpath)
+                @env.ui.info "Uploading #{file} to #{remote_file}"
+                scp.upload! file, remote_file
+              end
+              removed.each do |file|
+                remote_file = file.gsub(hostpath, guestpath)
+                @env.ui.info "Deleting #{remote_file}"
+                machine.communicate.sudo("rm #{remote_file}")
+              end
+            end
+
           end
+
         end
 
         0  #all is well
