@@ -15,12 +15,27 @@ module VagrantPlugins
 
           @env.ui.info "Watching #{hostpath} for changes..."
 
-          Listen.to(hostpath) do |modified, added, removed|
+          listener = Listen.to(hostpath) do |modified, added, removed|
             @env.ui.info "Detected modifications to #{modified.inspect}" unless modified.empty?
             @env.ui.info "Detected new files #{added.inspect}" unless added.empty?
             @env.ui.info "Detected deleted files #{removed.inspect}" unless removed.empty?
             
             trigger_unison_sync machine
+          end
+
+          queue = Queue.new
+          callback = lambda do
+            # This needs to execute in another thread because Thread
+            # synchronization can't happen in a trap context.
+            Thread.new { queue << true }
+          end
+
+          # Run the listener in a busy block so that we can cleanly
+          # exit once we receive an interrupt.
+          Vagrant::Util::Busy.busy(callback) do
+            listener.start
+            queue.pop
+            listener.stop if listener.listen?
           end
         end
 
