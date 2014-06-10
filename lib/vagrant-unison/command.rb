@@ -49,17 +49,37 @@ module VagrantPlugins
         machine.communicate.sudo("mkdir -p '#{guestpath}'")
         machine.communicate.sudo("chown #{ssh_info[:username]} '#{guestpath}'")
 
+        proxy_command = ""
+        if ssh_info[:proxy_command]
+          proxy_command = "-o ProxyCommand='#{ssh_info[:proxy_command]}' "
+        end
+
+        rsh = [
+          "-p #{ssh_info[:port]} " +
+          proxy_command +
+          "-o StrictHostKeyChecking=no " +
+          "-o UserKnownHostsFile=/dev/null",
+          ssh_info[:private_key_path].map { |p| "-i '#{p}'" },
+        ].flatten.join(" ")
+
         # Unison over to the guest path using the SSH info
         command = [
           "unison", "-batch",
           "-ignore=Name {.git*,.vagrant/,*.DS_Store}",
-          "-sshargs", "-p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i #{ssh_info[:private_key_path]}",
+          "-sshargs", rsh,
           hostpath,
           "ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
          ]
 
         r = Vagrant::Util::Subprocess.execute(*command)
-        if r.exit_code != 0
+        case r.exit_code
+        when 0
+          @env.ui.info "Unison completed succesfully"
+        when 1
+          @env.ui.info "Unison completed - all file transfers were successful; some files were skipped"
+        when 2
+          @env.ui.info "Unison completed - non-fatal failures during file transfer"
+        else
           raise Vagrant::Errors::UnisonError,
             :command => command.inspect,
             :guestpath => guestpath,
