@@ -1,5 +1,6 @@
 require "log4r"
 require "vagrant"
+require "thread"
 require 'listen'
 
 module VagrantPlugins
