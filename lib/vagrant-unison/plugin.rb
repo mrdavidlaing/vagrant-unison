@@ -34,6 +34,16 @@ module VagrantPlugins
         Command
       end
 
+      command "sync-repeat" do
+        # Setup logging and i18n
+        setup_logging
+        setup_i18n
+
+        #Return the command
+        require_relative "command"
+        CommandRepeat
+      end
+
       # This initializes the internationalization strings.
       def self.setup_i18n
         I18n.load_path << File.expand_path("locales/en.yml", Unison.source_root)

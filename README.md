@@ -38,6 +38,10 @@ Run `vagrant sync` to start watching the local_folder for changes, and syncing t
 Under the covers this uses your system installation of [Unison](http://www.cis.upenn.edu/~bcpierce/unison/), 
 which must be installed in your path.
 
+## Start syncing Folders in repeat mode
+
+Run `vagrant sync-repeat` to start in bidirect monitor (repeat) mode.
+
 ## Development
 
 To work on the `vagrant-unison` plugin, clone this repository out, and use
