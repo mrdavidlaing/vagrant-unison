@@ -75,7 +75,7 @@ module VagrantPlugins
           proxy_command +
           "-o StrictHostKeyChecking=no " +
           "-o UserKnownHostsFile=/dev/null",
-          ssh_info[:private_key_path].map { |p| "-i '#{p}'" },
+          ssh_info[:private_key_path].map { |p| "-i #{p}" },
         ].flatten.join(" ")
 
         # Unison over to the guest path using the SSH info
