@@ -12,7 +12,7 @@ to your Vagrant VM (local or on AWS).  Under the covers it uses [Unison](http://
 ## Usage
 
 1. You must already have [Unison](http://www.cis.upenn.edu/~bcpierce/unison/) installed and in your path.
-     * On Mac you can install this with Homebrew:  `brew install unison`
+     * On Mac you can install this with Homebrew:  `brew install unison` (on Yosemite you will have to use https://rudix-mountainlion.googlecode.com/files/unison-2.40.102-0.pkg)
      * On Unix (Ubuntu) install using `sudo apt-get install unison`
      * On Windows, download [2.40.102](http://alan.petitepomme.net/unison/assets/Unison-2.40.102.zip), unzip, rename `Unison-2.40.102 Text.exe` to `unison.exe` and copy to somewhere in your path.
 1. Install using standard Vagrant 1.1+ plugin installation methods. 
