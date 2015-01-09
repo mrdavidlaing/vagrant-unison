@@ -42,6 +42,21 @@ which must be installed in your path.
 
 Run `vagrant sync-repeat` to start in bidirect monitor (repeat) mode.
 
+## Cleanup unison database
+When you get
+```
+Fatal error: Warning: inconsistent state.  
+The archive file is missing on some hosts.
+For safety, the remaining copies should be deleted.
+  Archive arb126d8de1ef26a835b94cf51975c530f on host blablabla.local should be DELETED
+  Archive arbc6a36f85b3d1473c55565dd220acf68 on host blablabla is MISSING
+Please delete archive files as appropriate and try again
+or invoke Unison with -ignorearchives flag.
+```
+
+Run `vagrant sync-cleanup` to clear Archive from ~/Library/Application Support/Unison/ and files from host folder.
+Running Unison with -ignorearchives flag is a bad idea, since it will produce conflicts.
+
 ## Development
 
 To work on the `vagrant-unison` plugin, clone this repository out, and use

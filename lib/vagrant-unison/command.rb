@@ -155,7 +155,43 @@ module VagrantPlugins
         ].flatten.join(" ")
 
         # Unison over to the guest path using the SSH info
-        command = "unison -terse -repeat 1 -sshargs \"#{rsh}\" hosts ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
+        command = 'unison -ignore "Name {.idea}" -terse -repeat 1 -sshargs "'+rsh+'" hosts '+"ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
+        @env.ui.info "Running #{command}"
+
+        system(command)
+      end
+
+    end
+    class CommandCleanup < Vagrant.plugin("2", :command)
+
+      def execute
+
+        with_target_vms do |machine|
+          hostpath, guestpath = init_paths machine
+
+          trigger_unison_sync machine
+
+        end
+
+        0  #all is well
+      end
+
+      def init_paths(machine)
+          hostpath  = File.expand_path(machine.config.sync.host_folder, @env.root_path)
+          guestpath = machine.config.sync.guest_folder
+
+          # Make sure there is a trailing slash on the host path to
+          # avoid creating an additional directory with rsync
+          hostpath = "#{hostpath}/" if hostpath !~ /\/$/
+
+          [hostpath, guestpath]
+      end
+
+      def trigger_unison_sync(machine)
+        hostpath, guestpath = init_paths machine
+
+        # Unison over to the guest path using the SSH info
+        command = "rm -rf ~/Library/'Application Support'/Unison/* ; rm -rf #{guestpath}/*"
         @env.ui.info "Running #{command}"
 
         system(command)
