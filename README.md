@@ -43,6 +43,10 @@ which must be installed in your path.
 
 Run `vagrant sync-repeat` to start in bidirect monitor (repeat) mode.
 
+## Start syncing Folders in interactive mode
+
+Run `vagrant sync-interact` to start in interactive mode that allows solving conflicts.
+
 ## Cleanup unison database
 When you get
 ```

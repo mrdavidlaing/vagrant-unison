@@ -202,5 +202,63 @@ module VagrantPlugins
       end
 
     end
+    class CommandInteract < Vagrant.plugin("2", :command)
+
+      def execute
+
+        with_target_vms do |machine|
+          hostpath, guestpath = init_paths machine
+
+          trigger_unison_sync machine
+
+        end
+
+        0  #all is well
+      end
+
+      def init_paths(machine)
+          hostpath  = File.expand_path(machine.config.sync.host_folder, @env.root_path)
+          guestpath = machine.config.sync.guest_folder
+
+          # Make sure there is a trailing slash on the host path to
+          # avoid creating an additional directory with rsync
+          hostpath = "#{hostpath}/" if hostpath !~ /\/$/
+
+          [hostpath, guestpath]
+      end
+
+      def trigger_unison_sync(machine)
+        hostpath, guestpath = init_paths machine
+
+        @env.ui.info "Unisoning changes from {host}::#{hostpath} --> {guest VM}::#{guestpath}"
+
+        ssh_info = machine.ssh_info
+
+        # Create the guest path
+        machine.communicate.sudo("mkdir -p '#{guestpath}'")
+        machine.communicate.sudo("chown #{ssh_info[:username]} '#{guestpath}'")
+
+        proxy_command = ""
+        if ssh_info[:proxy_command]
+          proxy_command = "-o ProxyCommand='#{ssh_info[:proxy_command]}' "
+        end
+
+        rsh = [
+          "-p #{ssh_info[:port]} " +
+          proxy_command +
+          "-o StrictHostKeyChecking=no " +
+          "-o UserKnownHostsFile=/dev/null",
+          ssh_info[:private_key_path].map { |p| "-i #{p}" },
+        ].flatten.join(" ")
+
+        # Unison over to the guest path using the SSH info
+        ignore = machine.config.sync.ignore ? ' -ignore "'+machine.config.sync.ignore+'"' : '';
+        command = 'unison -terse -sshargs "'+rsh+'" hosts '+"ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"+ignore
+        @env.ui.info "Running #{command}"
+
+        system(command)
+      end
+
+    end
   end
 end
