@@ -79,13 +79,16 @@ module VagrantPlugins
         ].flatten.join(" ")
 
         # Unison over to the guest path using the SSH info
+        ignore = machine.config.sync.ignore ? '-ignore "'+machine.config.sync.ignore+'" ' : '';
         command = [
           "unison", "-batch",
-          "-ignore=Name {.git*,.vagrant/,*.DS_Store}",
           "-sshargs", rsh,
           hostpath,
           "ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
          ]
+        if machine.config.sync.ignore
+          command []= ignore
+        end
 
         r = Vagrant::Util::Subprocess.execute(*command)
         case r.exit_code
@@ -155,7 +158,8 @@ module VagrantPlugins
         ].flatten.join(" ")
 
         # Unison over to the guest path using the SSH info
-        command = 'unison -ignore "Name {.idea}" -terse -repeat 1 -sshargs "'+rsh+'" hosts '+"ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"
+        ignore = machine.config.sync.ignore ? ' -ignore "'+machine.config.sync.ignore+'"' : '';
+        command = 'unison -terse -repeat 1 -sshargs "'+rsh+'" hosts '+"ssh://#{ssh_info[:username]}@#{ssh_info[:host]}/#{guestpath}"+ignore
         @env.ui.info "Running #{command}"
 
         system(command)

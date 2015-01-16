@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
 
   config.sync.host_folder = "src/"  #relative to the folder your Vagrantfile is in
   config.sync.guest_folder = "src/" #relative to the vagrant home folder -> /home/vagrant
+  config.sync.ignore = "Name {.idea,.DS_Store}"
 
 end
 ```

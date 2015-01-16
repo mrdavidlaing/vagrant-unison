@@ -3,19 +3,25 @@ require "vagrant"
 module VagrantPlugins
   module Unison
     class Config < Vagrant.plugin("2", :config)
-      # The access key ID for accessing AWS.
+      # Host Folder to Sync
       #
       # @return [String]
       attr_accessor :host_folder
 
-      # The ID of the AMI to use.
+      # Guest Folder to Sync.
       #
       # @return [String]
       attr_accessor :guest_folder
 
+      # Pattern of files to ignore.
+      #
+      # @return [String]
+      attr_accessor :ignore
+
       def initialize(region_specific=false)
         @host_folder      = UNSET_VALUE
         @remote_folder    = UNSET_VALUE
+        @ignore           = UNSET_VALUE
       end
 
       #-------------------------------------------------------------------
@@ -34,6 +40,7 @@ module VagrantPlugins
         # The access keys default to nil
         @host_folder    = nil if @host_folder    == UNSET_VALUE
         @guest_folder   = nil if @guest_folder   == UNSET_VALUE
+        @ignore         = nil if @ignore         == UNSET_VALUE
 
         # Mark that we finalized
         @__finalized = true
