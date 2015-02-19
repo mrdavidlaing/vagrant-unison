@@ -12,3 +12,7 @@ Gemfile.lock
 .vagrant
 Vagrantfile
 !example_box/Vagrantfile
+
+# IDEs
+.project
+.idea
