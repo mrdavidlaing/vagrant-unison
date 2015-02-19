@@ -18,10 +18,16 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :ignore
 
+      # Repeat speed.
+      #
+      # @return [String]
+      attr_accessor :repeat
+
       def initialize(region_specific=false)
         @host_folder      = UNSET_VALUE
         @remote_folder    = UNSET_VALUE
         @ignore           = UNSET_VALUE
+        @repeat           = UNSET_VALUE
       end
 
       #-------------------------------------------------------------------
@@ -41,6 +47,7 @@ module VagrantPlugins
         @host_folder    = nil if @host_folder    == UNSET_VALUE
         @guest_folder   = nil if @guest_folder   == UNSET_VALUE
         @ignore         = nil if @ignore         == UNSET_VALUE
+        @repeat         = 1   if @repeat         == UNSET_VALUE
 
         # Mark that we finalized
         @__finalized = true
