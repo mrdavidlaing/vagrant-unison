@@ -6,9 +6,9 @@ require 'listen'
 module VagrantPlugins
   module Unison
     class Command < Vagrant.plugin("2", :command)
-      
+
       def execute
-        
+
         with_target_vms do |machine|
           hostpath, guestpath = init_paths machine
 
@@ -20,7 +20,7 @@ module VagrantPlugins
             @env.ui.info "Detected modifications to #{modified.inspect}" unless modified.empty?
             @env.ui.info "Detected new files #{added.inspect}" unless added.empty?
             @env.ui.info "Detected deleted files #{removed.inspect}" unless removed.empty?
-            
+
             trigger_unison_sync machine
           end
 
@@ -106,7 +106,7 @@ module VagrantPlugins
             :stderr => r.stderr
         end
       end
-     
+
     end
     class CommandRepeat < Vagrant.plugin("2", :command)
 
